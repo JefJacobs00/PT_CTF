@@ -4,12 +4,18 @@ from vernamcipher.cryptographic import Cryptographic
 def encrypt(data, key):
     return Cryptographic.exclusive_operations(data, key)
 
-
-values = ['TBWH\x7fUiPL]BA]Z^iDQ\x05nVWuKICl^[_m^WME', 'RBUMqZn_CVDAYYWjF_\x03mT\\zEKAfP_YoYQIO', 'UD_Ix_fSARGDX[Ql@X\x00lT^qFHAf^_[lRTLJ', 'VLQJzZmQMQCGX\\VhGX\x02hW_rKJAb\\_XkXS@J', 'ZMSJ~TiVG]@JZXPoD\\\x02jQ^vGMHb^YVk]SMO', '[LUC\x7f]mQAVJF\\\\SkFQ\x04gWVwCICf]]WfXWJJ', 'WL_CzYj^D]AJ\\\\TnC\\\x03nVY{EIEmXYWnY]JO', 'VCWBpZmVM\\GJ^ZPjC\\\x0biVZsE@FeZX\\i]QMJ', 'PEWH|_jSCS@D\\X_oEP\x04iV_uJLHfZ]]l]WKK', 'VMQLq\\kTGPFDXWSiD_\x05iP^uJ@EeY_^l]TND', 'TB_NxUgWGV@DZZThEP\x05mUVv@MAa\\W\\oSPKM', 'TC_Bx^gWEQDDQ\\^hA[\ngWZtJOGlXV]j^UHE', 'QLRM\x7fYfQDQDC[]RiD_\x04g]ZsDNBa^Z_g\\SMN', 'T@WIz\\l^APJG^VToL_\x00g]WqGNDaX^ZfZTKL', 'QDTJqZgUEUJBYW^lL[\x05hUYz@OClQYYk]VNJ', 'QDSJ\x7f^iUDPKD]_RjD^\x04nPZwBHBe^_WhYWAN', '[F^Jy]jQMPGJ[Z_oG\\\x01gRZtKJ@bY\\Xm\\PKE', '[MRK}\\nPE]KBYXRmFY\nnQ\\uJNIeYV[jY]HD', 'QFPIqXiSDTBBP_UjMZ\nmQ_p@OBa[[Wn]]HK', 'UETI|]oPDQJBQWTkAY\x01gQYtJOBlQ_^g]]KL', 'TD_N{UmT@SACP[QfGP\x01nQ]zCLEc^[^m[VON', '[BWHyUgW@]FE\\^TjEX\x07g]WvBN@dQ\\Zi_\\OM', 'RFUB}XnTAWK@]\\UnMX\x05oVVrCHDfX^]m[SNN', 'WMQBz]fQGPEB]__oL\\\x07h]\\tKJEeYVWn]SNO', 'RF^By_g^DUAFXZVgA\\\x03lUWsAIHf_Z]o]RMK']
+f = open("intercepted.txt", "r")
+values = f.read().split(';;')[:-1]
+print(values)
+real_values = ['TBWH\x7fUiPL]BA]Z^iDQ\x05nVWuKICl^[_m^WME', 'RBUMqZn_CVDAYYWjF_\x03mT\\zEKAfP_YoYQIO', 'UD_Ix_fSARGDX[Ql@X\x00lT^qFHAf^_[lRTLJ', 'VLQJzZmQMQCGX\\VhGX\x02hW_rKJAb\\_XkXS@J', 'ZMSJ~TiVG]@JZXPoD\\\x02jQ^vGMHb^YVk]SMO', '[LUC\x7f]mQAVJF\\\\SkFQ\x04gWVwCICf]]WfXWJJ', 'WL_CzYj^D]AJ\\\\TnC\\\x03nVY{EIEmXYWnY]JO', 'VCWBpZmVM\\GJ^ZPjC\\\x0biVZsE@FeZX\\i]QMJ', 'PEWH|_jSCS@D\\X_oEP\x04iV_uJLHfZ]]l]WKK', 'VMQLq\\kTGPFDXWSiD_\x05iP^uJ@EeY_^l]TND', 'TB_NxUgWGV@DZZThEP\x05mUVv@MAa\\W\\oSPKM', 'TC_Bx^gWEQDDQ\\^hA[\ngWZtJOGlXV]j^UHE', 'QLRM\x7fYfQDQDC[]RiD_\x04g]ZsDNBa^Z_g\\SMN', 'T@WIz\\l^APJG^VToL_\x00g]WqGNDaX^ZfZTKL', 'QDTJqZgUEUJBYW^lL[\x05hUYz@OClQYYk]VNJ', 'QDSJ\x7f^iUDPKD]_RjD^\x04nPZwBHBe^_WhYWAN', '[F^Jy]jQMPGJ[Z_oG\\\x01gRZtKJ@bY\\Xm\\PKE', '[MRK}\\nPE]KBYXRmFY\nnQ\\uJNIeYV[jY]HD', 'QFPIqXiSDTBBP_UjMZ\nmQ_p@OBa[[Wn]]HK', 'UETI|]oPDQJBQWTkAY\x01gQYtJOBlQ_^g]]KL', 'TD_N{UmT@SACP[QfGP\x01nQ]zCLEc^[^m[VON', '[BWHyUgW@]FE\\^TjEX\x07g]WvBN@dQ\\Zi_\\OM', 'RFUB}XnTAWK@]\\UnMX\x05oVVrCHDfX^]m[SNN', 'WMQBz]fQGPEB]__oL\\\x07h]\\tKJEeYVWn]SNO', 'RF^By_g^DUAFXZVgA\\\x03lUWsAIHf_Z]o]RMK']
 
 number = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 possibilities = {}
-for value in values:
+print((len(values)))
+for i in range(len(real_values)):
+    value = values[i]
+    print(value == real_values[i])
+    print(f"{value} =? {real_values[i]}")
     for i in range(1, len(value) + 1):
         v = value[:i]
         if i not in possibilities:
@@ -50,7 +56,7 @@ for i in range(1, len(filtered)):
         words.append({})
     skip = False
     for letter in filtered[i]:
-        if not letter.isalpha():
+        if not letter.isalpha() and not letter.isdigit():
             word_counter += 1
             letter_counter = 0
             skip = True

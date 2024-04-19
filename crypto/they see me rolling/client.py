@@ -1,9 +1,9 @@
 from vernamcipher.cryptographic import Cryptographic
 import random
 
-FLAG = "ctf{Im_guessing_th3_enCrypTion_key}"
+FLAG = "ctf{FAKE KEY}" # <--- secret key
 
-secret_seed = 2570334840819712139117301843868267838046992
+secret_seed = 123 # <-- secret seed
 random.seed(secret_seed)
 
 def generate_nth(n):
@@ -25,7 +25,10 @@ def button_press(N):
 
 
 if __name__ == "__main__":
-    t = []
-    for x in range(25):
-        t.append(button_press(x))
-    print(t)
+    N = input()
+    button_press(N)
+
+
+
+
+
