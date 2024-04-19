@@ -4,7 +4,7 @@ git get got [Easy]
 
 ## Description
 
-My frend has sent me his secret cat stash. Can you figure out why he is so secretive about this?
+My friend has sent me his secret cat stash. Can you figure out why he is so secretive about this?
 
 ## Solutions
 There is a .git folder where if you check the diff with the first one you can see that the flag is renamed to the hash of the image.
