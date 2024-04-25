@@ -17,7 +17,7 @@ I opted for the local attack since it's way less noisy. It looks to the administ
 
 The seed is in range 1/ 1 000 000. Lets say you generate 5 numbers per seed on average. that means you have to generate 5 million numbers. Someone has posted that they can generate 1 million random numbers in 0.9 seconds. That means in 5 seconds you could have the seed. Total time would take ~20 seconds. 
 
-The remote attack is way less time efficient. The attacker has to try 5 times on average to guess the number. They have to do that 1000 times and each time they have to send the n previous numbers this gives an avg request amount of $\sum_{n=1}^1000 5n$. That gives 2497500 requests, lets say each request takes 10ms. That would give us about 7 hours of completion time. 
+The remote attack is way less time efficient. The attacker has to try 5 times on average to guess the number. They have to do that 1000 times and each time they have to send the n previous numbers this gives an avg request amount of $\sum_{n=1} 5n$. That gives 2497500 requests, lets say each request takes 10ms. That would give us about 7 hours of completion time. 
 
 Possible, but not so nice in a CTF. 
 
