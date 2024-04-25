@@ -63,15 +63,14 @@ def value_guesser(client_socket):
                 client_socket.close()
                 return
 
-    client_socket.send(
-        "You won, here is your flag! If you can tell me what the randomly generated seed was...\n #> ".encode())
-    data = client_socket.recv(1024).decode("utf-8").strip()
-    print(data)
-    if data == f"{seed}":
-        client_socket.send("flag: ctf{s33ds_4r3_us3l3ss!}".encode())
-    else:
-        print(f"{data} =? {seed}")
-        client_socket.send("That was not the seed, better luck next time")
+    #client_socket.send("You won, here is your flag! If you can tell me what the randomly generated seed was...\n #> ".encode())
+    #data = client_socket.recv(1024).decode("utf-8").strip()
+    client_socket.send("flag: ctf{s33ds_4r3_us3l3ss!}".encode())
+    #if data == f"{seed}":
+        #client_socket.send("flag: ctf{s33ds_4r3_us3l3ss!}".encode())
+    #else:
+        #print(f"{data} =? {seed}")
+        #client_socket.send("That was not the seed, better luck next time")
 
     client_socket.close()
 
