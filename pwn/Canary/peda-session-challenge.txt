@@ -1,0 +1,2 @@
+break *(exploit +52)
+

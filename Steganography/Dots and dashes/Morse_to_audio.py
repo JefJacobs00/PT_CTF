@@ -135,7 +135,8 @@ def generate_block_wave_string(file_path, threshold=0, block_duration=0.05):
             elif time == 150:
                 decode_string += '-'
             else:
-                print(f"THE TIME DID NOT MAKE ANY SENSE HELP (time = {time})")
+                pass
+                #print(f"THE TIME DID NOT MAKE ANY SENSE HELP (time = {time})")
 
 
 
@@ -143,7 +144,7 @@ def generate_block_wave_string(file_path, threshold=0, block_duration=0.05):
     return decode_string
 
 # Example usage:
-file_path = 'c:/users/jacobsj/downloads/challenge.wav'  # Replace 'example.wav' with the path to your WAV file
+file_path = 'challenge.wav'  # Replace 'example.wav' with the path to your WAV file
 block_wave_string = generate_block_wave_string(file_path)
 print("decoded:", block_wave_string)
 print(block_wave_string == text)
