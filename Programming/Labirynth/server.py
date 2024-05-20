@@ -1,5 +1,16 @@
 import random
 
+
+def number_to_cord(number, row_size):
+    return (number // row_size, number % row_size)
+
+def cord_to_number(cord, row_size):
+    y, x = cord
+    number = x
+    number += y * row_size
+
+    return number
+
 class Graph:
     def __init__(self, n):
         self.n = n
@@ -39,6 +50,19 @@ class Graph:
                         key[v - 1] = self.graph[u + 1][v]
 
         return mst
+    def mst_to_graph(self, mst):
+        graph = {}
+        for i in range(1, len(mst)):
+            node_to = mst[i]
+            if i not in graph:
+                graph[i] = []
+            if node_to not in graph:
+                graph[node_to] = []
+
+            graph[i].append(node_to)
+            graph[node_to].append(i)
+
+        self.graph = graph
 
     def _min_key(self, key, mst_set):
         min_val = float('inf')
@@ -51,40 +75,27 @@ class Graph:
 
         return min_idx
 
-def visualize(mst, n):
-    layout = []
-    layout.append(["S"])
-    for i in range(1, len(mst)):
-        source = (i//n, i%n)
-        dest = (mst[i]//n, mst[i]%n)
-        if source[1] == 0:
-            layout.append([])
-        # columns
-        if dest[1] != source[1]:
-            layout[source[0]].append("H")
-        # rows
-        elif dest[0] != source[0]:
-            layout[source[0]].append("V")
-
-    return layout
-
-
-def print_possible_paths(position, layout, max):
-    paths = ["b"]
+def print_possible_paths(position, graph, row_size):
+    paths = []
     y, x = position
-    if y - 1 >= 0 and (layout[y - 1][x] == "V" or layout[y - 1][x] == "S"):
-        print("You can go up.")
-        paths.append("u")
-    if y + 1 < max and (layout[y + 1][x] == "V" or layout[y + 1][x] == "S"):
-        print("You can go down.")
-        paths.append("d")
-    if x - 1 >= 0 and (layout[y][x - 1] == "H" or layout[y][x - 1] == "S"):
-        print("You can go left.")
-        paths.append("l")
-    if x + 1 < max and (layout[y][x + 1] == "H" or layout[y][x + 1] == "S"):
-        print("You can go right.")
-        paths.append("r")
-
+    position_index = cord_to_number(position, row_size)
+    edges = graph[position_index]
+    for edge in edges:
+        y_edge, x_edge = number_to_cord(edge, row_size)
+        if y != y_edge:
+            if y > y_edge:
+                paths.append("u")
+                print('You can go up')
+            else:
+                paths.append("d")
+                print('You can go down')
+        elif x != x_edge:
+            if x > x_edge:
+                paths.append("l")
+                print('You can go left')
+            else:
+                paths.append("r")
+                print("You can go right")
     return paths
 
 death_message = ["""
@@ -127,6 +138,10 @@ death_message = ["""
    ╚═╝    ╚═════╝  ╚═════╝     ╚═════╝ ╚═╝╚══════╝╚═════╝                                                         
 """]
 
+
+
+
+
 def move(move_direction, current_position, possible_paths):
     if move_direction not in possible_paths:
         c = random.randint(0, len(death_message))
@@ -164,8 +179,6 @@ d: down
 l: left
 r: right 
 
-you can always go back by entering b.
-
 I will let you know what paths are viable, you don't have to stick to the paths, 
 Keep in mind that you are not yet a ghost, so you might want to avoid running into a wall.
 """
@@ -175,26 +188,20 @@ layers = [3, 5, 10, 20, 50, 100]
 for n in layers:
     graph = Graph(n)
     mst = graph.prim_mst()
-    print(mst)
-    layout = visualize(mst, n)
-    finish_index = random.randint(1, len(mst))
-    finish_coord = (finish_index // n, finish_index % n)
-    print(finish_coord)
-    print(layout)
+    graph.mst_to_graph(mst)
+    finish_coord = (n - 1, n - 1)
 
     #col, row
     position = (0,0)
     previous_position = (0, 0)
 
     while True:
-        paths = print_possible_paths(position, layout, n)
+        paths = print_possible_paths(position, graph.graph, n)
         direction = input("\nWhere do you want to go?\n?> ")
 
         try:
-            if direction == "b":
-                position = previous_position
-            else:
-                position = move(direction[0], position, paths)
+
+            position = move(direction[0], position, paths)
             previous_position = position
             if position == finish_coord:
                 print("Congrats you found the entrance to the next floor")

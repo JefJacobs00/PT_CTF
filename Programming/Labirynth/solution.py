@@ -1,8 +1,9 @@
 import random
-
 from pwn import *
 
-IP = "127.0.0.1"
+
+#IP = "127.0.0.1"
+IP = "108.143.241.81"
 PORT = 65432
 
 numbers = []
@@ -16,7 +17,6 @@ def solve_game(n, depth):
         attempt[depth] = 1
     else:
         attempt[depth] = attempt[depth] + 1
-
     connection = remote(IP, PORT)
     for i in range(depth):
         connection.sendlineafter(b">", f"{numbers[i]}".encode())
@@ -72,11 +72,13 @@ while i < 1000:
     connection.sendlineafter(b">", f"{number}".encode())
     response = connection.recvline().decode('utf-8')
     print(response)
+    print(i)
     if "next round!!" not in response:
         print("exiting")
         break
     i += 1
 
+connection.interactive()
 connection.sendlineafter(b"#>", f"{seed}".encode())
 response = connection.recvall(timeout=0.2).decode('utf-8')
 print(response)
