@@ -168,23 +168,24 @@ intro = r"""
                      __/ |                       
                     |___/                        
 
-You have entered the labyrinth. There are multiple floors and you need to find the exit. 
+You have entered a dark labyrinth. There are multiple floors, you need to find the exit. 
 Be careful you have a limited amount of time before the labyrinth changes.
+You can move through the labyrinth by typing where you want to go. 
+You have a compas so you know where you are going relative to your start position (you start in the north west corner and you have to go to the south east corner). 
 
-Wandering for to long on a single floor can also trigger some evil spirits that will haunt you 👻.
-You can move through the labyrinth by typing if you want to go: 
+I'll tell you which of these options are viable:
 
-u: up
-d: down
-l: left
-r: right 
+u: up (North)
+d: down (South)
+l: left (West)
+r: right (East)
 
-I will let you know what paths are viable, you don't have to stick to the paths, 
+I will let you know what paths are viable. You don't have to stick to the paths, 
 Keep in mind that you are not yet a ghost, so you might want to avoid running into a wall.
 """
 print(intro)
 
-layers = [3, 5, 10, 20, 50, 100]
+layers = [3, 5, 10, 15, 25]
 for n in layers:
     graph = Graph(n)
     mst = graph.prim_mst()
@@ -210,7 +211,7 @@ for n in layers:
             print(e)
             exit()
 
-        print(position)
+print("Congrats; you see the light at the end of the tunnel. You got out and see the flag written in plain sight ctf{just_follow_me_and_run_like_your_life_depends_on_it}")
 
 
 

@@ -4,82 +4,115 @@ from pwn import *
 
 #IP = "127.0.0.1"
 IP = "108.143.241.81"
-PORT = 65432
+PORT = 1337
 
 numbers = []
 attempt = {}
 
+def get_directions(connection):
+    possible_directions = []
+    recv = connection.recvuntil(b"Congrats", timeout=0.1).decode("utf-8")
+    if "Congrats" in recv:
+        print("Next layer found")
+        return True
+    recv = connection.recvuntil(b"?>", timeout=0.1).decode("utf-8")
+    print(recv)
+    directions = ["down", "up", "right", "left"]
+    for direction in directions:
+        if direction in recv:
+            possible_directions.append(direction)
 
-def solve_game(n, depth):
-    if depth >= n:
-        return
-    if depth not in attempt:
-        attempt[depth] = 1
-    else:
-        attempt[depth] = attempt[depth] + 1
-    connection = remote(IP, PORT)
-    for i in range(depth):
-        connection.sendlineafter(b">", f"{numbers[i]}".encode())
+    return possible_directions
 
-    print(f"Guessing value: {attempt[depth]}")
-    connection.sendlineafter(b">", f"{attempt[depth]}".encode())
-    response = connection.recvall(timeout=0.2).decode('utf-8')
-    print(response)
-    if "Nice" in response:
-        numbers.append(attempt[depth])
-        print(f"The number on depth: {depth} is {numbers[depth]}")
-        solve_game(n, depth + 1)
-    elif "Sorry" in response:
-        return solve_game(n, depth)
-    else:
-        connection.interactive()
-    return connection
-
-
-def plausable_seed(numbers, seed):
-    random.seed(seed)
-    for i in range(len(numbers)):
-        x = random.randint(1, 10)
-        if x != numbers[i]:
-            return False
-    return True
-
-
-def guess_seed(numbers):
-    seed = 0
-    while True:
-        if plausable_seed(numbers, seed):
-            return seed
-        else:
-            seed += 1
-
-
-
-LIMIT = int(math.pow(10, 6))
-c = solve_game(10, 0)
-
-#numbers = [10, 7, 3, 6, 6, 4, 3, 1, 4, 1]
-print(numbers)
-print("Bruteforce the seed....")
-seed = guess_seed(numbers)
-print(f"Found the seed: {seed}")
 
 connection = remote(IP, PORT)
-random.seed(seed)
-i = 0
-while i < 1000:
-    number = random.randint(1, 10)
-    connection.sendlineafter(b">", f"{number}".encode())
-    response = connection.recvline().decode('utf-8')
-    print(response)
-    print(i)
-    if "next round!!" not in response:
-        print("exiting")
-        break
-    i += 1
+intro = connection.recvuntil(b"You can go ")
+print(intro.decode('utf-8'))
 
-connection.interactive()
-connection.sendlineafter(b"#>", f"{seed}".encode())
-response = connection.recvall(timeout=0.2).decode('utf-8')
-print(response)
+def str_to_cord(str):
+    y, x = str.split(',')
+    return int(y), int(x)
+
+def cord_to_str(cord):
+    y, x = cord
+    return f"{y},{x}"
+
+
+def find_exit():
+    position = (0, 0)
+    graph = {}
+
+    next_step(position, graph, 0)
+
+def next_step(position, graph, n):
+    if n == 5:
+        return
+    visited = []
+    print(f"Entering layer:  {n}")
+    move(visited, [], graph, position, None)
+    next_step((0, 0), {}, n +1)
+
+def calculate_direction(position, next_position):
+    direction_changes = {"1,0": "up", "-1,0": "down", "0,1": "left", "0,-1": "right"}
+
+    y, x = position
+    next_y, next_x = next_position
+
+    diff_cord = y - next_y, x - next_x
+    diff_str = cord_to_str(diff_cord)
+    return direction_changes[diff_str]
+
+
+def move(visited, dead_end, graph, position, prev_pos):
+    possible_directions = get_directions(connection)
+    if type(possible_directions) == bool:
+        return True
+    add_directions_to_graph(possible_directions, position, graph)
+
+    location = cord_to_str(position)
+    visited.append(location)
+    for node in graph[cord_to_str(position)]:
+        # check if visited (being visited) or dead_end (finished visiting) --> move to edge if false
+        if node not in visited and node not in dead_end:
+            # calculate direction
+            direction = calculate_direction(position, str_to_cord(node))
+            connection.sendline(f"{direction}".encode('utf-8'))
+            print(f"Moving to: {node}; by going {direction}")
+            next_layer = move(visited, dead_end, graph, str_to_cord(node), position)
+            if next_layer:
+                return True
+
+
+    dead_end.append(location)
+    direction = calculate_direction(position, prev_pos)
+
+    connection.sendline(f"{direction}".encode('utf-8'))
+    print(f"Moving back to: {cord_to_str(prev_pos)}; by going {direction}")
+    recv = connection.recvuntil(b"?>", timeout=0.1).decode("utf-8")
+    print(recv)
+
+
+def add_directions_to_graph(possible_directions, position, graph):
+    direction_changes = {"down": (1, 0), "right": (0, 1), "up": (-1, 0), "left": (0, -1)}
+    for direction in possible_directions:
+        move_y, move_x = direction_changes[direction]
+        y, x = position
+        new_cord = (y + move_y, x + move_x)
+
+        str = cord_to_str(new_cord)
+        position_str = cord_to_str(position)
+
+        if position_str not in graph:
+            graph[position_str] = []
+        if str not in graph:
+            graph[str] = []
+
+        if position_str not in graph[str]:
+            graph[str].append(position_str)
+        if str not in graph[position_str]:
+            graph[position_str].append(str)
+
+
+
+find_exit()
 connection.interactive()
