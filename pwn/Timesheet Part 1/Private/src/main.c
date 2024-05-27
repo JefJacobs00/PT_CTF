@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-
+#define adminMode 0
 
 void sendTimesheet(){
     char name[20];
@@ -47,14 +47,16 @@ void printAdminMenu(){
 }
 
 int main() {
-    while (true){
+    setvbuf(stdout, NULL, _IONBF, 0);
+	while (true){
 
-        short adminMode = 0;
+        int adminCode = 0;
         char choice;
 
-        if (adminMode){
+        if(adminMode){
             printAdminMenu();
-        } else{
+            scanf("%d", &adminCode);
+        }else{
             printMenu();
         }
 
@@ -72,14 +74,14 @@ int main() {
             case '3':
                 sendTimesheet();
                 break;
-            case '4':
-                if(adminMode){
-                    printf("ctf{FLAG_PLACEHOLDER}\n");
+            case '5':
+                if(adminCode == 123456){
+                    printf("ctf{buff3r_0v3r_fl0w1ng_th3_c0ntr0l_v4ri4bl3}\n");
                 } else{
                     return 0;
                 }
                 break;
-            case '5':
+            case '4':
                 return 0;
         }
     }

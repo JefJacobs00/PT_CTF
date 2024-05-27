@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  server:
+    container_name: canary_server
+    build: .
+    ports:
+      - "9991:9991"
+    restart: always
+

@@ -1,0 +1,10 @@
+version: "3"
+   
+services:
+  server:
+    container_name: timesheet_server
+    build: .
+    ports:
+      - "1339:1339"
+    restart: always
+

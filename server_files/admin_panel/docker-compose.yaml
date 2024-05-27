@@ -1,0 +1,10 @@
+version: "3"
+   
+services:
+  server:
+    container_name: admin_panel_server
+    build: .
+    ports:
+      - "1338:1338"
+    restart: always
+

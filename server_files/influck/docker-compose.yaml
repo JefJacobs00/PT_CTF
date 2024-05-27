@@ -1,0 +1,10 @@
+version: "3"
+   
+services:
+  server:
+    container_name: infinite_luck_server
+    build: .
+    ports:
+      - "65432:65432"
+    restart: always
+

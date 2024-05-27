@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 int main() {
+    setvbuf(stdout, NULL, _IONBF, 0);
     printf("Kill the canary\n");
     char a = 0;
     char input[20];

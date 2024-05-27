@@ -11,7 +11,7 @@ attempt = {}
 
 def get_directions(connection):
     possible_directions = []
-    recv = connection.recvuntil(b"Congrats", timeout=0.1).decode("utf-8")
+    recv = connection.recvuntil(b"Congrats", timeout=0.5).decode("utf-8")
     if "Congrats" in recv:
         print("Next layer found")
         return True
